@@ -58,11 +58,11 @@ transcribes each locally — no Apify required to build voice or competitor hook
 
 User-level (every Claude Code session):
 ```bash
-git clone <this repo> ~/.claude/skills/script-skill
+git clone https://github.com/valerymad/script-short-skill.git ~/.claude/skills/script-short-skill
 ```
 Project-level (just this project):
 ```bash
-mkdir -p .claude/skills && git clone <this repo> .claude/skills/script-skill
+mkdir -p .claude/skills && git clone https://github.com/valerymad/script-short-skill.git .claude/skills/script-short-skill
 ```
 
 ### Dependencies
