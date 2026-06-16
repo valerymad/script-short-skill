@@ -1,6 +1,6 @@
 ---
 name: hooks
-description: "Save viral hooks from Instagram reels to your Script Skill database. Trigger when you type /hooks followed by a URL. Downloads the reel, transcribes it, extracts the hook, and saves it for future script inspiration."
+description: "Generate scroll-stopping hooks for short-form video, OR save a hook you saw. GENERATE: returns 3 hook variants from a 120-formula library (12 psychology triggers) + your saved hooks — activate when the user asks 'give me hooks for [topic]', 'write 3 hooks for this Reel/TikTok/Short about X', 'I have a script about Y, give me hook options', 'write opening lines about Z', wants a confession/contrarian/story-style hook, pastes a script and wants alternative openers, or is brainstorming scroll-stoppers. SAVE: when the user gives /hooks <Instagram/TikTok/YouTube URL>, download → transcribe → extract → categorize → store in their personal hooks database. Works with or without /hooks; bilingual RU/EN."
 allowed-tools:
   - Read
   - Write
@@ -8,132 +8,130 @@ allowed-tools:
   - Bash
   - Glob
   - Grep
+  - AskUserQuestion
 ---
 
-# /hooks — Add a Hook to Your Database
+# /hooks — Save or Generate Hooks
 
-## Purpose
+## Mode detection (do this first)
 
-Save high-performing hooks from Instagram reels to your personal hooks database. Every hook you save makes your `/script` output better — Claude reads the full database for inspiration when writing new scripts.
+Look at the argument after `/hooks`:
 
-## Trigger
-
-User types `/hooks [instagram_reel_url]`
-
-Example: `/hooks https://www.instagram.com/reel/DVh5BtIiS_L/`
-
----
-
-## Step 0 — Find Config
-
-Read `~/Documents/script-skill/config.json` to get:
-- `dataDir` — where all Script Skill data lives
-- `toolPaths.ytDlp` — path to yt-dlp
-- `toolPaths.whisper` — path to whisper
-
-If config doesn't exist, tell the user:
-```
-You need to run /script first to set up Script Skill. That will install your tools and create your database.
-```
-Stop here.
+- **Starts with `http://` / `https://`** (instagram.com, tiktok.com, youtube.com,
+  youtu.be, …) → **SAVE MODE**.
+- **Anything else** (a topic, a pasted script, or empty) → **GENERATE MODE**.
 
 ---
 
-## Step 1 — Download the reel
+# SAVE MODE — add a hook to your database
 
+Save a high-performing hook from a real video to your personal swipe file. Every
+saved hook makes `/script` better.
+
+## S0 — Find config
+Read `~/Documents/script-skill/config.json` → `dataDir`, `toolPaths.ytDlp`,
+`toolPaths.transcribeScript`.
+If it doesn't exist:
+> "Run /script first to set up your skill (installs tools, creates your database)."
+Then stop. (You can still use GENERATE MODE without setup — it falls back to the
+shipped formula library.)
+
+## S1 — Download (yt-dlp, with cookie fallback)
 ```bash
-[ytDlpPath] "[URL]" -o /tmp/hook_reel.mp4 --merge-output-format mp4 -q
+"$YT_DLP" "<URL>" -o /tmp/hook_reel.mp4 --merge-output-format mp4 -q \
+  || "$YT_DLP" "<URL>" -o /tmp/hook_reel.mp4 --merge-output-format mp4 -q --cookies-from-browser safari \
+  || echo "DOWNLOAD_FAILED"
 ```
+If it fails (private / deleted / geo / age-gated), tell the user and stop.
 
-If download fails (private reel, deleted, geo-restricted, etc.) — tell the user and stop.
-
----
-
-## Step 2 — Transcribe
-
+## S2 — Transcribe (via the transcribe-media-local skill)
 ```bash
-[whisperPath] /tmp/hook_reel.mp4 --model base --output_format txt --output_dir /tmp/ --fp16 False
+python3 ~/.claude/skills/transcribe-media-local/scripts/transcribe.py \
+  /tmp/hook_reel.mp4 --output /tmp --format txt
 ```
+Read `/tmp/hook_reel.txt`. (Do not pass `--model`/`--language`; the skill's
+defaults — `small`, auto-language — handle RU/EN automatically. If the skill is
+missing, fall back to `whisper /tmp/hook_reel.mp4 --model small --output_format txt --output_dir /tmp/ --fp16 False`.)
 
-Read the output from `/tmp/hook_reel.txt`.
+## S3 — Extract + categorize
+The hook = the opening 1–3 sentences (~first 5–10s). Extract it precisely. Then
+pick the closest category from the 12-category taxonomy (see
+`hooks-formulas-en.md` / `hooks-formulas-ru.md`):
 
----
+`01 Curiosity · 02 Contrarian · 03 Authority · 04 Emotional · 05 Listicle ·
+06 Question · 07 Story · 08 Negation · 09 Specificity · 10 Confession ·
+11 Urgency/FOMO · 12 Discovery/Result-Lead`
 
-## Step 3 — Extract the hook
+Also write a 1-sentence "why it works".
 
-The hook is the **opening 1–3 sentences** — everything said in roughly the first 5–10 seconds. This is what stops the scroll. Extract it precisely from the transcript.
-
-Then identify:
-
-- **Hook type** — pick the closest match:
-  - `Bold Claim` — makes a strong, surprising statement
-  - `Curiosity Gap` — withholds info to create pull ("here's what nobody tells you")
-  - `Contrarian` — challenges a widely held belief
-  - `Tool Discovery` — "X is insane / I can't live without X"
-  - `Result Lead` — opens with an outcome or number
-  - `Pain Agitation` — names a frustration the viewer has
-  - `Identity Call-out` — speaks directly to a specific person
-  - `Raw Energy` — pure excitement, just hit record
-  - `Cost Savings` — specific before/after with dollar amounts
-  - `Forbidden/Secret` — implies exclusive access
-  - `Replace + Proof` — names the thing being replaced
-  - `Urgency/FOMO` — a window is closing
-  - `Viewer Callout` — directly challenges the viewer
-  - `Absurd Escalation` — exaggerates for impact
-
-- **Why it works** — 1 sentence explanation of the psychological mechanism
-
----
-
-## Step 4 — Save to database
-
-Read `{dataDir}/hooks-database.md`. Count existing hooks to determine the next hook number.
-
-Append the new entry:
-
+## S4 — Save to `{dataDir}/hooks-database.md`
+Read the file, count existing hooks for the next number, append:
 ```markdown
----
-
 ## Hook #[N]
-**Source:** [full URL]
-**Creator:** @[extract handle from URL]
-**Date:** [today's date, YYYY-MM-DD]
-**Type:** [hook type]
+**Source:** [URL]
+**Creator:** @[handle from URL if derivable, else "unknown"]
+**Date:** [today YYYY-MM-DD]
+**Views:** [if known, else n/a]
+**Category:** [Cat NN — Name]
 
 **Hook:**
-> "[Exact opening lines from transcript]"
+> "[exact opening lines]"
 
-**Why it works:** [1-sentence explanation]
+**Why it works:** [1 sentence]
 
-**Full opening (first ~10 seconds):**
-"[First 3–5 sentences of transcript for more context]"
+**Full opening (~10s):**
+"[first 3–5 sentences]"
 ```
-
-If the hooks database file doesn't exist yet, create it with this header first:
-
+If the file doesn't exist, create it with a header first:
 ```markdown
 # Hooks Database
-> Personal swipe file of high-performing hooks from Instagram reels.
-> Used by /script for inspiration when writing new scripts.
+> Personal swipe file of high-performing hooks from real videos.
+> Used by /script and /hooks (generate) for inspiration.
 > Add more anytime with /hooks [url]
 ```
 
----
-
-## Step 5 — Confirm
-
-Tell the user:
-- What the hook was (quote it)
-- What type it is
-- That it's saved (Hook #N in the database)
-- Total hooks in database so far
-
-**Do NOT show the full transcript** unless the user asks. Just the hook + confirmation.
-
----
-
-## Step 6 — Clean up
-
+## S5 — Confirm + clean up
+Tell the user: the hook (quoted), its category, "saved as Hook #N", total hooks
+now. Do NOT dump the full transcript unless asked.
 ```bash
 rm -f /tmp/hook_reel.mp4 /tmp/hook_reel.txt
 ```
+
+---
+
+# GENERATE MODE — 3 hook variants from a topic/script
+
+## G0 — Read the input
+If the user pasted a script, read it. If they gave only a topic, ask ONE short
+question about the audience or angle, then proceed. Detect language (RU/EN) from
+the input (or ask).
+
+## G1 — Load the library
+Read the matching formula file: `hooks-formulas-ru.md` (RU) or
+`hooks-formulas-en.md` (EN) from this skill folder. **Always read it.**
+If `~/Documents/script-skill/config.json` → `dataDir/hooks-database.md` exists,
+also read it (the user's proven hooks).
+
+## G2 — Pick 3 hooks
+Identify the emotional beat the topic fits. Pick 3 formulas, best practice: mix
+one **stop-scroll** category (08 Negation / 09 Specificity / 06 Question) with one
+**retention** category (07 Story / 10 Confession / 04 Emotional); third is free.
+Prefer patterns proven in the personal `hooks-database.md` when relevant.
+
+Fill the `[brackets]` with the topic's specific words, number, pain, or audience.
+Keep each filled hook under 12 words, native to the platform (TikTok/IG = casual;
+LinkedIn = punchy/declarative; YouTube = title-style; X = short/contrarian).
+
+## G3 — Output
+```
+HOOK 1 — [Cat NN — Name · #ID · Platform] · best for [reason]
+"<filled hook>"
+
+HOOK 2 — [Cat NN — Name · #ID · Platform] · best for [reason]
+"<filled hook>"
+
+HOOK 3 — [Cat NN — Name · #ID · Platform] · best for [reason]
+"<filled hook>"
+```
+Then one sentence: which to lead with and why. Offer:
+**"Want the full script around one of these? Run /script."**
