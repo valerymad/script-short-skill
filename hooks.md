@@ -29,7 +29,7 @@ Save a high-performing hook from a real video to your personal swipe file. Every
 saved hook makes `/script` better.
 
 ## S0 — Find config
-Read `~/Documents/script-skill/config.json` → `dataDir`, `toolPaths.ytDlp`,
+Read `~/Documents/script-short-skill/config.json` → `dataDir`, `toolPaths.ytDlp`,
 `toolPaths.transcribeScript`.
 If it doesn't exist:
 > "Run /script first to set up your skill (installs tools, creates your database)."
@@ -109,7 +109,7 @@ the input (or ask).
 ## G1 — Load the library
 Read the matching formula file: `hooks-formulas-ru.md` (RU) or
 `hooks-formulas-en.md` (EN) from this skill folder. **Always read it.**
-If `~/Documents/script-skill/config.json` → `dataDir/hooks-database.md` exists,
+If `~/Documents/script-short-skill/config.json` → `dataDir/hooks-database.md` exists,
 also read it (the user's proven hooks).
 
 ## G2 — Pick 3 hooks

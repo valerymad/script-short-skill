@@ -32,7 +32,7 @@ This skill has two engines:
 
 The skill works at three tiers. Detect which one applies and proceed; never block.
 
-1. Look for `~/Documents/script-skill/config.json`.
+1. Look for `~/Documents/script-short-skill/config.json`.
    - If it exists, read it → it contains `dataDir` (path to all user data).
    - If it doesn't, this is a first-time user.
 2. Decide the tier:
@@ -296,7 +296,7 @@ At the end of setup, save `{dataDir}/config.json`:
   "cronEnabled": true/false
 }
 ```
-Also save the pointer `~/Documents/script-skill/config.json` → `{ "dataDir": "..." }`.
+Also save the pointer `~/Documents/script-short-skill/config.json` → `{ "dataDir": "..." }`.
 
 ---
 
