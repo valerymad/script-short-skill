@@ -1,6 +1,6 @@
 ---
 name: script
-description: "Write ready-to-record short-video scripts in YOUR voice. Combines a 120-formula viral-hook library (12 psychology triggers) with voice calibration from your real videos and your competitors' best hooks. Works instantly from the formula library (Tier 0); gets more personal as you feed it reel/TikTok/Shorts links or connect Apify. Bilingual RU/EN. Use when writing a Reel/TikTok/Shorts script, brainstorming hooks ('give me 3 hooks for X' / 'дай 3 хука на X'), or saving a hook you saw from a URL ('save this hook: <url>')."
+description: "Write ready-to-record short-video scripts in YOUR voice. Combines a 120-formula viral-hook library (12 psychology triggers) with voice calibration from your real videos and your competitors' best hooks. Works instantly from the formula library (Tier 0); gets more personal as you feed it reel/TikTok/Shorts links or connect Apify. Bilingual RU/EN. Use when writing a Reel/TikTok/Shorts script, brainstorming hooks ('give me 3 hooks for X' / 'дай 3 хука на X'), or saving a hook you saw from a URL ('save this hook: <url>', 'сохрани хук <url>', 'новый хук <url>')."
 allowed-tools:
   - Read
   - Write
@@ -68,7 +68,9 @@ natural language. Before launching the full 16-step flow, check intent:
    then the filled hook. End with one line: "lead with #X because…". Offer the
    full script. (If the user wants the full 10-option treatment, use Step 12.)
 
-### B. Save a hook from a URL — "save this hook: <url>"
+### B. Save a hook from a URL — "save this hook: <url>", "сохрани хук <url>", "новый хук <url>"
+**Disambiguation:** if the message contains a URL → SAVE (mode B). If it's a topic
+with no URL (e.g. "новый хук на тему X") → GENERATE (mode A).
 1. Needs the data dir. If `~/Documents/script-short-skill/config.json` is missing,
    offer setup first — or do a one-off: still download+transcribe and show the
    extracted hook, but warn it isn't saved to a database yet.
