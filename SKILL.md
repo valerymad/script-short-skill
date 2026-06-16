@@ -1,6 +1,6 @@
 ---
 name: script
-description: "Write ready-to-record short-video scripts in YOUR voice. Combines a 120-formula viral-hook library (12 psychology triggers) with voice calibration from your real videos and your competitors' best hooks. Works instantly from the formula library (Tier 0); gets more personal as you feed it reel/TikTok/Shorts links or connect Apify. Bilingual RU/EN. Use for /script, writing a Reel/TikTok/Shorts script, or hook brainstorming."
+description: "Write ready-to-record short-video scripts in YOUR voice. Combines a 120-formula viral-hook library (12 psychology triggers) with voice calibration from your real videos and your competitors' best hooks. Works instantly from the formula library (Tier 0); gets more personal as you feed it reel/TikTok/Shorts links or connect Apify. Bilingual RU/EN. Use when writing a Reel/TikTok/Shorts script, brainstorming hooks ('give me 3 hooks for X' / 'дай 3 хука на X'), or saving a hook you saw from a URL ('save this hook: <url>')."
 allowed-tools:
   - Read
   - Write
@@ -48,6 +48,36 @@ The skill works at three tiers. Detect which one applies and proceed; never bloc
 
 **Run first-time SETUP only when** the user asks to set up / personalize, or when
 they explicitly want voice calibration and competitor mining.
+
+---
+
+## Quick modes (no full script needed)
+
+There is no separate `/hooks` command — these run inside this skill, triggered by
+natural language. Before launching the full 16-step flow, check intent:
+
+### A. Generate hooks only — "give me 3 hooks for X", "hooks for this script"
+1. Detect language (RU/EN) from the request, or ask.
+2. ALWAYS read the matching library: `hooks-formulas-ru.md` or
+   `hooks-formulas-en.md`. If `{dataDir}/hooks-database.md` exists, read it too.
+3. Return **3 variants**, mixing one stop-scroll category (08 Negation / 09
+   Specificity / 06 Question) with one retention category (07 Story / 10
+   Confession / 04 Emotional); third is free. Fill the `[brackets]` with the
+   topic's specifics, keep each under 12 words, native to the platform.
+4. Format each: `HOOK n — [Cat NN — Name · #ID · Platform] · best for [reason]`
+   then the filled hook. End with one line: "lead with #X because…". Offer the
+   full script. (If the user wants the full 10-option treatment, use Step 12.)
+
+### B. Save a hook from a URL — "save this hook: <url>"
+1. Needs the data dir. If `~/Documents/script-short-skill/config.json` is missing,
+   offer setup first — or do a one-off: still download+transcribe and show the
+   extracted hook, but warn it isn't saved to a database yet.
+2. Download (Phase 1b helper) → transcribe (Phase 1a helper) → extract the
+   opening 1–3 sentences → categorize into the 12-category taxonomy → append to
+   `{dataDir}/hooks-database.md` (entry format in Phase 5). Confirm, then clean up
+   the `/tmp` files.
+
+For anything else (a topic + wanting a real script), continue with the flow below.
 
 ---
 

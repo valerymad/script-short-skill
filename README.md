@@ -45,12 +45,14 @@ transcribes each locally — no Apify required to build voice or competitor hook
 
 ## Commands
 
-- `/script` — the full flow: pick language → topic → format → **10 hook options
+- **Run the skill** — the slash command matches the install folder name (e.g.
+  `/script-short-skill`). Full flow: language → topic → format → **10 hook options
   across 12 categories** → you pick → full script → De-AI → humanizer → deliver.
-- `/hooks <URL>` — **save** a hook from an IG/TikTok/YouTube video to your
-  personal database (download → transcribe → extract → categorize into the 12).
-- `/hooks <topic or pasted script>` — **generate** 3 scroll-stopping hook variants
-  (one stop-scroll + one retention) from the library + your saved hooks.
+
+Hooks are handled **inside the skill via natural language** — no separate command
+(the word "hooks" is overloaded in Claude Code):
+- *"give me 3 hooks for [topic]"* → 3 quick variants (stop-scroll + retention)
+- *"save this hook: <URL>"* → download → transcribe → categorize → store in your DB
 
 ---
 
@@ -82,7 +84,6 @@ competitor mining). After that, `/script` goes straight to writing.
 | File | Role |
 |------|------|
 | `SKILL.md` | the `/script` skill (tiers, setup, generation, De-AI, humanizer) |
-| `hooks.md` | the dual-mode `/hooks` command (save URL / generate from topic) |
 | `hooks-formulas-en.md` | 120 hook formulas, 12 triggers — **English** (static library) |
 | `hooks-formulas-ru.md` | 120 hook formulas, 12 triggers — **Russian** (native adaptation) |
 | `preview.html` | styled visual reference (EN, the original 100 — open in a browser) |
