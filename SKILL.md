@@ -57,7 +57,9 @@ There is no separate `/hooks` command — these run inside this skill, triggered
 natural language. Before launching the full 16-step flow, check intent:
 
 ### A. Generate hooks only — "give me 3 hooks for X", "hooks for this script"
-1. Detect language (RU/EN) from the request, or ask.
+1. Detect language (RU/EN) from the request, or ask. If the user pasted a script,
+   read it; if they gave only a topic, ask ONE short question about the audience
+   or angle, then proceed.
 2. ALWAYS read the matching library: `hooks-formulas-ru.md` or
    `hooks-formulas-en.md`. If `{dataDir}/hooks-database.md` exists, read it too.
 3. Return **3 variants**, mixing one stop-scroll category (08 Negation / 09
@@ -75,9 +77,13 @@ with no URL (e.g. "новый хук на тему X") → GENERATE (mode A).
    offer setup first — or do a one-off: still download+transcribe and show the
    extracted hook, but warn it isn't saved to a database yet.
 2. Download (Phase 1b helper) → transcribe (Phase 1a helper) → extract the
-   opening 1–3 sentences → categorize into the 12-category taxonomy → append to
-   `{dataDir}/hooks-database.md` (entry format in Phase 5). Confirm, then clean up
-   the `/tmp` files.
+   opening 1–3 sentences + a 1-sentence "why it works" → categorize into the
+   12-category taxonomy → append to `{dataDir}/hooks-database.md` (entry format in
+   Phase 5; if the file doesn't exist, create it with the `# Hooks Database`
+   header first).
+3. Confirm: quote the saved hook, its category, "saved as Hook #N", and the total
+   count — do NOT dump the full transcript unless asked. Then clean up the `/tmp`
+   files.
 
 For anything else (a topic + wanting a real script), continue with the flow below.
 
