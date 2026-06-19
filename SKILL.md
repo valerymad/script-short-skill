@@ -125,8 +125,7 @@ python3 ~/.claude/skills/transcribe-media-local/scripts/transcribe.py \
   "/tmp/ss_temp.mp4" --output /tmp --format txt
 # → transcript at /tmp/ss_temp.txt
 ```
-Do NOT pass `--model` or `--language` — the skill owns those defaults (model
-`small`, auto-detect language, which is what we want for mixed RU/EN sources).
+Do NOT pass `--model` or `--language` — the skill owns those defaults. Unless asked explicitly.
 
 ### 1b. Downloader — yt-dlp (platform-agnostic: IG / TikTok / YouTube)
 

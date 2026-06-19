@@ -5,10 +5,9 @@ that sound like **you**, built on a **120-formula viral-hook library** and
 calibrated to your real videos and your competitors' best hooks.
 
 This is a merge of two skills:
-- **Script Skill** (@tenfoldmarc) — the voice-calibration + full-script pipeline
+- **Script Skill** — the voice-calibration + full-script pipeline
   (brand voice, competitor mining, De-AI checklist, humanizer).
-- **viral-hooks** — a library of 100 hook formulas across 10 psychology triggers,
-  here extended to **120 formulas / 12 triggers** and localized to **RU + EN**.
+- **viral-hooks** — a library of **120 formulas / 12 psycology triggers** and localized to **RU + EN**.
 
 ---
 
@@ -25,8 +24,7 @@ This is a merge of two skills:
 - **Bilingual.** Full RU and EN formula sets; pick the language per run (or auto).
 - **Local-first.** Downloading (yt-dlp) and transcription
   ([transcribe-media-local](https://github.com/valerymad/transcribe-media-local))
-  run on your machine. Apify is optional and only used to *find* which videos to
-  grab.
+  run on your machine. Apify is optional and only used to *find* which videos to grab.
 
 ---
 
@@ -99,6 +97,4 @@ Your personal data lives separately in `~/Documents/script-short-skill/`
 
 ## Credits
 
-- Pipeline & voice/De-AI/humanizer concept: [@tenfoldmarc](https://www.instagram.com/tenfoldmarc) (Script Skill).
-- Hook library: adapted from [social-media-hooks-database](https://github.com/jakeolschewski/social-media-hooks-database) (MIT), extended + localized.
 - Local transcription: [transcribe-media-local](https://github.com/valerymad/transcribe-media-local) by [@valerymad](https://github.com/valerymad).
