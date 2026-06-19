@@ -7,7 +7,7 @@ calibrated to your real videos and your competitors' best hooks.
 This is a merge of two skills:
 - **Script Skill** — the voice-calibration + full-script pipeline
   (brand voice, competitor mining, De-AI checklist, humanizer).
-- **viral-hooks** — a library of **120 formulas / 12 psycology triggers** and localized to **RU + EN**.
+- **viral-hooks** — a library of **120 formulas / 12 psychology triggers** and localized to **RU + EN**.
 
 ---
 
