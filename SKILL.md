@@ -32,8 +32,10 @@ This skill has two engines:
 
 The skill works at three tiers. Detect which one applies and proceed; never block.
 
-1. Look for `~/Documents/script-short-skill/config.json`.
-   - If it exists, read it → it contains `dataDir` (path to all user data).
+1. Look for `settings.local.json` **in this skill folder** (next to `SKILL.md`).
+   - If it exists, read it → `dataDir` (path to all user data), `language`,
+     `niche`, `toolPaths`. This is the single config file; there is no second
+     copy inside `dataDir`.
    - If it doesn't, this is a first-time user.
 2. Decide the tier:
    - **Tier 0 (instant):** no `dataDir` / no data files yet → you can STILL write
@@ -73,7 +75,7 @@ natural language. Before launching the full 16-step flow, check intent:
 ### B. Save a hook from a URL — "save this hook: <url>", "сохрани хук <url>", "новый хук <url>"
 **Disambiguation:** if the message contains a URL → SAVE (mode B). If it's a topic
 with no URL (e.g. "новый хук на тему X") → GENERATE (mode A).
-1. Needs the data dir. If `~/Documents/script-short-skill/config.json` is missing,
+1. Needs the data dir. If `settings.local.json` is missing from the skill folder,
    offer setup first — or do a one-off: still download+transcribe and show the
    extracted hook, but warn it isn't saved to a database yet.
 2. Download (Phase 1b helper) → transcribe (Phase 1a helper) → extract the
@@ -315,9 +317,12 @@ If the user declines, skip — they can ask later.
 
 ## Save Config
 
-At the end of setup, save `{dataDir}/config.json`:
+At the end of setup, save **one** file — `settings.local.json` in the skill
+folder (gitignored, never committed). `dataDir` points wherever the user wants
+their data; nothing else needs to live at a fixed path:
 ```json
 {
+  "dataDir": "/absolute/path/to/user/data",
   "handle": "@username",
   "niche": "...",
   "avatar": "...",
@@ -333,7 +338,8 @@ At the end of setup, save `{dataDir}/config.json`:
   "cronEnabled": true/false
 }
 ```
-Also save the pointer `~/Documents/script-short-skill/config.json` → `{ "dataDir": "..." }`.
+`dataDir` holds content only — `brand-voice.md`, `hooks-database.md`,
+`my-transcripts/`, `competitor-transcripts/`. No config file goes in there.
 
 ---
 
@@ -349,7 +355,7 @@ Also save the pointer `~/Documents/script-short-skill/config.json` → `{ "dataD
 2. **If they exist** in `dataDir`, also load: `brand-voice.md` (voice + custom
    De-AI checklist), `hooks-database.md` (personal competitor hooks),
    `my-transcripts/` (sort by views desc — your top performers are the voice
-   calibration), `competitor-analysis.md`, `config.json`.
+   calibration), `competitor-analysis.md`.
 3. Missing files do NOT break the run — degrade to the formula library + neutral
    native-platform voice.
 

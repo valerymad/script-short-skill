@@ -87,9 +87,11 @@ competitor mining). After that, `/script` goes straight to writing.
 | `preview.html` | styled visual reference (EN, the original 100 — open in a browser) |
 | `plan_short_video.md` | the build plan + implementation progress |
 
-Your personal data lives separately in `~/Documents/script-short-skill/`
-(`config.json`, `brand-voice.md`, `hooks-database.md` ← your swipe file,
-`my-transcripts/`, `competitor-transcripts/`, `competitor-analysis.md`). Note:
+Settings live in `settings.local.json` in the skill folder (gitignored) — one
+file, holding `dataDir` plus your language/niche/tool paths. Your personal data
+lives wherever `dataDir` points (`brand-voice.md`, `hooks-database.md` ← your
+swipe file, `my-transcripts/`, `competitor-transcripts/`,
+`competitor-analysis.md`). Note:
 `hooks-database.md` (your saved competitor hooks) is **different** from the static
 `hooks-formulas-*.md` (the universal templates).
 
