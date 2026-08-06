@@ -356,6 +356,8 @@ their data; nothing else needs to live at a fixed path:
    De-AI checklist), `hooks-database.md` (personal competitor hooks),
    `my-transcripts/` (sort by views desc — your top performers are the voice
    calibration), `competitor-analysis.md`.
+   Also re-read `charismaProfile` + `hookPreference` from `settings.local.json` —
+   they drive category selection in Step 12 and the register of the whole script.
 3. Missing files do NOT break the run — degrade to the formula library + neutral
    native-platform voice.
 
@@ -376,9 +378,20 @@ energy — not abstract rules.
 
 ## Step 12 — Generate 10 Hook Options (MOST IMPORTANT — spend ~40% here)
 
-The hook is the whole video. Generate **10 options, each from a DIFFERENT one of
-the 12 categories.** Each hook must be 3–12 words (spoken in <3s), trigger instant
-curiosity, sound like the user's voice (if known), and signal a clear benefit.
+The hook is the whole video. Generate **10 options across as many categories as
+the user's profile allows.** Each hook must be 3–12 words (spoken in <3s), trigger
+instant curiosity, sound like the user's voice (if known), and signal a clear
+benefit.
+
+**Category spread depends on `hookPreference` in `settings.local.json`:**
+- **No `hookPreference`** (default): one hook from each of 10 DIFFERENT categories
+  out of 12 — maximum spread, let the user discover what fits them.
+- **`hookPreference` set:** the spread is filtered by personality fit, because a
+  hook that fights the speaker's natural register dies on camera even when the
+  formula is strong. Draw **7 of 10 from `primary`**, 2 from `secondary`, and 1
+  free slot for contrast. Never pull from `avoid` unless the user asks explicitly
+  — except IDs listed in `allowFromAvoided`, which are cleared individually.
+  Still vary categories WITHIN the allowed set; never send 10 hooks of one kind.
 
 **Source the hooks from three layers, in priority order:**
 1. **Personal `hooks-database.md`** — categories/patterns proven to work for
@@ -392,6 +405,11 @@ In Tier 0, use layer 2 only — still produce 10 strong, varied hooks.
 Apply the **stop-scroll + retention** pairing: at least one stop-scroll hook
 (Cat 08 Negation, 09 Specificity, or 06 Question) and at least one retention hook
 (Cat 07 Story, 10 Confession, or 04 Emotional).
+
+If `hookPreference` rules out part of that pairing, satisfy it from what's left —
+`stopScrollSource` names the replacement. The pairing is mandatory; the specific
+categories are not. Dropping the stop-scroll half entirely is not an option: every
+hook being a soft, inviting opener is exactly how a feed scrolls past you.
 
 **Format each option** with category + formula ID + platform:
 > **1. [Cat 08 — Negation · #071 · TikTok/IG]** "Не алгоритм. Твой первый кадр."
